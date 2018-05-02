@@ -6,22 +6,34 @@ class AdicionarLivro extends Component {
     state = {
         pesquisa: ''
     }
+    atualizarPesquisa = (pesquisa) => {
+        const {apiLivros} = this.props;
+        this.setState({
+            pesquisa: pesquisa.trim()
+        });
+
+        apiLivros.search(pesquisa).then((resposta) => {
+            this.props.quandoEncontrarOsLivros(resposta);
+        })
+    }
     render() {
+        const {pesquisa} = this.state;
         return (
                 <div className="search-books">
                     <div className="search-books-bar">
                         <Link to='/' className="close-search" >Voltar</Link>
                         <div className="search-books-input-wrapper">
-                            <input value={this.state.pesquisa} type="text" placeholder="Pesquise por titulo ou autor"/>
+                            <input 
+                                value={pesquisa} 
+                                type="text" 
+                                placeholder="Pesquise por titulo ou autor"
+                                onChange={(event) => {
+                        this.atualizarPesquisa(event.target.value)
+                                                                }}/>
                         </div>
                     </div>
-                    <div className="search-books-results">
-                        <ol className="books-grid">
-                            //todo livros encontrados
-                        </ol>
-                    </div>
                 </div>
-                )
+                    );
     }
 }
 
