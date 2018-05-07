@@ -16,7 +16,6 @@ class AdicionarLivro extends Component {
         });
 
         apiLivros.search(pesquisa).then((resposta) => {
-            console.log(resposta);
             this.setState({
                 pesquisa: pesquisa.trim(),
                 livrosEncontrados: resposta

@@ -9,7 +9,6 @@ import './App.css';
 class App extends Component {
 
     componentDidMount() {
-        console.log('App componentDidMount');
         BooksAPI.getAll().then((livrosEncotradosJaNaAPI) => {
             const estanteCurrentlyReading = 0;
             const estanteWantToRead = 1;
@@ -99,6 +98,14 @@ class App extends Component {
             estanteAtualizada[pratileiraNova].livros = livrosDaPratileiraNova;
 
             this.setState({estante: estanteAtualizada});
+            
+            let estanteEmIngles = '';
+            switch(pratileiraNova){
+                case 0: estanteEmIngles = 'currentlyReading'; break;
+                case 1: estanteEmIngles = 'wantToRead'; break;
+                case 2: estanteEmIngles = 'read'; break;
+            }
+            BooksAPI.update(livroParaMover, estanteEmIngles);
         }
     }
 }
