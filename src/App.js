@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
-import { Link } from 'react-router-dom';
-import Livro from './Livro';
+import Estante from './Estante';
 import AdicionarLivro from './AdicionarLivro';
 import './App.css';
 
@@ -39,48 +38,20 @@ class App extends Component {
         return (
         <div className="app">               
             <Route exact path='/' render={() => (
-                <div className="list-books">
-                    <div className="list-books-title">
-                        <h1>MyReads</h1>
-                    </div>
-                    <div className="list-books-content">                    
-                        <div>
-                            <div className="open-search">
-                                <Link to='/search'>
-                                Adicionar um livro
-                                </Link>
-                            </div>
-                            {estante.map((estante, indexEstante) => (
-                            <div key={indexEstante} className="bookshelf">
-                                <h2 className="bookshelf-title">{estante.pratilheira}</h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                        {estante.livros.map((livro, indexLivro) => (
-                                            <Livro 
-                                                key={indexLivro} 
-                                                pratileiraAtual={indexEstante}
-                                                livro={livro}
-                                                mudarLivroDePratileira={this.mudarLivroDePratileira}
-                                            />
-                                        ))}
-                                    </ol>
-                                </div>
-                            </div>
-                            ))}
-                        </div>              
-                    </div>
-                </div>
+                <Estante
+                estante={estante}
+                mudarLivroDePratileira={this.mudarLivroDePratileira}        
+                />
             )}/>
-            <Route path='/search' render={({history}) => ( 
-                    <div>
-                        <AdicionarLivro 
-                        quandoAdicionarUmLivro={(valores)=>{
-                            this.mudarLivroDePratileira(valores[0],valores[1],valores[2])
-                            history.push('/')
-                            }}
-                        apiLivros={BooksAPI} 
-                        />             
-                    </div>
+            <Route path='/search' render={({history}) => (
+                <AdicionarLivro 
+                estante={estante}
+                quandoAdicionarUmLivro={(valores)=>{
+                    this.mudarLivroDePratileira(valores[0],valores[1],valores[2])
+                    history.push('/')
+                    }}
+                apiLivros={BooksAPI} 
+                />
             )}/>
                
         </div>)
@@ -104,6 +75,7 @@ class App extends Component {
                 case 0: estanteEmIngles = 'currentlyReading'; break;
                 case 1: estanteEmIngles = 'wantToRead'; break;
                 case 2: estanteEmIngles = 'read'; break;
+                default: estanteEmIngles = 'none'; break;
             }
             BooksAPI.update(livroParaMover, estanteEmIngles);
         }

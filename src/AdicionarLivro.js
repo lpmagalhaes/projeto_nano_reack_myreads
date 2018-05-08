@@ -9,21 +9,17 @@ class AdicionarLivro extends Component {
         livrosEncontrados: []
     }
     atualizarPesquisa = (pesquisa) => {
-        const {apiLivros} = this.props;
-        this.setState({
-            pesquisa: pesquisa.trim(),
-            livrosEncontrados: []
-        });
-
-        apiLivros.search(pesquisa).then((resposta) => {
-            this.setState({
-                pesquisa: pesquisa.trim(),
-                livrosEncontrados: resposta
+        this.setState({pesquisa: pesquisa});
+        if (pesquisa) {
+            const {apiLivros} = this.props;
+            apiLivros.search(pesquisa).then((resposta) => {
+                this.setState({livrosEncontrados: resposta});
             });
-        })
+        }
     }
     render() {
         const {pesquisa, livrosEncontrados} = this.state;
+
         return (
                 <div className="search-books">
                     <div className="search-books-bar">
@@ -35,20 +31,20 @@ class AdicionarLivro extends Component {
                                 placeholder="Pesquise por titulo ou autor"
                                 onChange={(event) => {
                         this.atualizarPesquisa(event.target.value)
-                                                }}/>
+                                                                                }}/>
                         </div>
                     </div>
                 
                     <div className="search-books-results">
                         <ol className="books-grid">
-                            {livrosEncontrados.map((livro, indexLivro) => (
+                            {livrosEncontrados.length > 0 ? livrosEncontrados.map((livro, indexLivro) => (
                                             <Livro 
                                                 key={indexLivro}
                                                 livro={livro}
-                                                pratileiraAtual={'none'}
+                                                pratileiraAtual={livro.shelf}
                                                 mudarLivroDePratileira={this.moverLivroParaUmaPratileira}
                                                 />
-                                                ))}
+                                                )): ''}
                         </ol>
                     </div>
                 </div>
@@ -58,8 +54,8 @@ class AdicionarLivro extends Component {
         if (pratileiraNova !== 'none') {
             this.setState({pesquisa: '', livrosEncontrados: []});
             const {quandoAdicionarUmLivro} = this.props;
-            let valores= [livroParaMover, pratileiraAtual, pratileiraNova];
-            quandoAdicionarUmLivro(valores);             
+            let valores = [livroParaMover, pratileiraAtual, pratileiraNova];
+            quandoAdicionarUmLivro(valores);
         }
     }
 }
