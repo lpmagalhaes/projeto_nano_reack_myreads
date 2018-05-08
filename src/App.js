@@ -8,7 +8,7 @@ import './App.css';
 class App extends Component {
 
     componentDidMount() {
-        BooksAPI.getAll().then((livrosEncotradosJaNaAPI) => {
+        BooksAPI.getAll().then((livrosEncotradosJaNaAPI) => {   
             const estanteCurrentlyReading = 0;
             const estanteWantToRead = 1;
             const estanteRead = 2;
@@ -59,6 +59,14 @@ class App extends Component {
     
      mudarLivroDePratileira = (livroParaMover, pratileiraAtual, pratileiraNova) => {
         if (pratileiraNova !== 'none') {
+            let estanteEmIngles = '';
+            switch(pratileiraNova){
+                case '0': estanteEmIngles = 'currentlyReading'; break;
+                case '1': estanteEmIngles = 'wantToRead'; break;
+                case '2': estanteEmIngles = 'read'; break;
+                default: estanteEmIngles = 'none'; break;
+            }
+            livroParaMover.shelf = estanteEmIngles;        
             let estanteAtualizada = this.state.estante;
             if(pratileiraAtual !== 'none'){
                 let livrosDaPratileiraAtualRemovidoOPassado =
@@ -67,17 +75,7 @@ class App extends Component {
             }
             let livrosDaPratileiraNova = estanteAtualizada[pratileiraNova].livros.concat(livroParaMover);
             estanteAtualizada[pratileiraNova].livros = livrosDaPratileiraNova;
-
             this.setState({estante: estanteAtualizada});
-            
-            let estanteEmIngles = '';
-            switch(pratileiraNova){
-                case 0: estanteEmIngles = 'currentlyReading'; break;
-                case 1: estanteEmIngles = 'wantToRead'; break;
-                case 2: estanteEmIngles = 'read'; break;
-                default: estanteEmIngles = 'none'; break;
-            }
-            BooksAPI.update(livroParaMover, estanteEmIngles);
         }
     }
 }

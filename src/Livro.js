@@ -8,17 +8,13 @@ class Livro extends Component {
         render() {            
         const { livro, mudarLivroDePratileira } = this.props;
         let { pratileiraAtual } = this.props;
-        if(pratileiraAtual !== 'none' &&
-                pratileiraAtual !== '0' &&
-                pratileiraAtual !== '1' &&
-                pratileiraAtual !== '2'){
-            switch (pratileiraAtual){
+        switch (pratileiraAtual){
                 case 'currentlyReading': pratileiraAtual = 0;break;
                 case 'wantToRead': pratileiraAtual = 1;break;
                 case 'read': pratileiraAtual = 2;break;
                 default: pratileiraAtual = 'none'; break;
-            }
         }
+       
         return (
             <li>
                 <div className="book">

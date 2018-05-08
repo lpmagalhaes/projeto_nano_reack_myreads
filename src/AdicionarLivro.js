@@ -13,7 +13,21 @@ class AdicionarLivro extends Component {
         if (pesquisa) {
             const {apiLivros} = this.props;
             apiLivros.search(pesquisa).then((resposta) => {
-                this.setState({livrosEncontrados: resposta});
+                let livrosAjustados = [];
+                if (resposta.length > 0) {
+                    const estante = this.props.estante;
+                    livrosAjustados = resposta.map((livroDaPesquisa)=>{
+                        estante.forEach((pratileira)=>{
+                               pratileira.livros.forEach((livroNaEstante)=>{
+                                   if(livroDaPesquisa.id === livroNaEstante.id){
+                                       livroDaPesquisa.shelf = livroNaEstante.shelf;
+                                   }
+                               }) 
+                        })                        
+                        return(livroDaPesquisa);
+                    })
+                }
+                this.setState({livrosEncontrados: livrosAjustados});
             });
         }
     }
@@ -31,7 +45,7 @@ class AdicionarLivro extends Component {
                                 placeholder="Pesquise por titulo ou autor"
                                 onChange={(event) => {
                         this.atualizarPesquisa(event.target.value)
-                                                                                }}/>
+                }}/>
                         </div>
                     </div>
                 
@@ -44,7 +58,7 @@ class AdicionarLivro extends Component {
                                                 pratileiraAtual={livro.shelf}
                                                 mudarLivroDePratileira={this.moverLivroParaUmaPratileira}
                                                 />
-                                                )): ''}
+                                    )) : ''}
                         </ol>
                     </div>
                 </div>
