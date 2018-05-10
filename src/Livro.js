@@ -8,11 +8,16 @@ class Livro extends Component {
         render() {            
         const { livro, mudarLivroDePratileira } = this.props;
         let { pratileiraAtual } = this.props;
-        switch (pratileiraAtual){
-                case 'currentlyReading': pratileiraAtual = 0;break;
-                case 'wantToRead': pratileiraAtual = 1;break;
-                case 'read': pratileiraAtual = 2;break;
-                default: pratileiraAtual = 'none'; break;
+        if(pratileiraAtual === 'currentlyReading' ||
+                pratileiraAtual === 'wantToRead' ||
+                pratileiraAtual === 'read' ||
+                pratileiraAtual === undefined){            
+            switch (pratileiraAtual){
+                    case 'currentlyReading': pratileiraAtual = '0';break;
+                    case 'wantToRead': pratileiraAtual = '1';break;
+                    case 'read': pratileiraAtual = '2';break;
+                    default: pratileiraAtual = 'none'; break;
+            }
         }
        
         return (
@@ -22,7 +27,7 @@ class Livro extends Component {
                         <div className="book-cover" style={{ 
                             width: 128,           
                             height: 193,
-                            backgroundImage: `url(${livro.imageLinks.thumbnail ? livro.imageLinks.thumbnail : ''})` }}></div>
+                            backgroundImage: `url(${livro.imageLinks ? livro.imageLinks.thumbnail : ''})` }}></div>
                         <div className="book-shelf-changer">
                             <select value={pratileiraAtual} onChange={(event) => {mudarLivroDePratileira(livro, pratileiraAtual, event.target.value)}}>
                                 <option value="move" disabled>Move to...</option>

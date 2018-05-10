@@ -50,7 +50,6 @@ class App extends Component {
                     this.mudarLivroDePratileira(valores[0],valores[1],valores[2])
                     history.push('/')
                     }}
-                apiLivros={BooksAPI} 
                 />
             )}/>
                
@@ -70,12 +69,14 @@ class App extends Component {
             let estanteAtualizada = this.state.estante;
             if(pratileiraAtual !== 'none'){
                 let livrosDaPratileiraAtualRemovidoOPassado =
-                    estanteAtualizada[pratileiraAtual].livros.filter((livroAtuais) => (livroAtuais.title !== livroParaMover.title));
+                    estanteAtualizada[pratileiraAtual].livros.filter((livroAtuais) => (livroAtuais.id !== livroParaMover.id));
                 estanteAtualizada[pratileiraAtual].livros = livrosDaPratileiraAtualRemovidoOPassado;
             }
             let livrosDaPratileiraNova = estanteAtualizada[pratileiraNova].livros.concat(livroParaMover);
             estanteAtualizada[pratileiraNova].livros = livrosDaPratileiraNova;
             this.setState({estante: estanteAtualizada});
+            
+            BooksAPI.update(livroParaMover, livroParaMover.shelf);
         }
     }
 }

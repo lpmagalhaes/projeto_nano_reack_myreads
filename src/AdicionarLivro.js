@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {Link} from 'react-router-dom';
 import Livro from './Livro';
+import * as BooksAPI from './BooksAPI';
 
 class AdicionarLivro extends Component {
     state = {
@@ -11,8 +12,7 @@ class AdicionarLivro extends Component {
     atualizarPesquisa = (pesquisa) => {
         this.setState({pesquisa: pesquisa});
         if (pesquisa) {
-            const {apiLivros} = this.props;
-            apiLivros.search(pesquisa).then((resposta) => {
+            BooksAPI.search(pesquisa).then((resposta) => {
                 let livrosAjustados = [];
                 if (resposta.length > 0) {
                     const estante = this.props.estante;
